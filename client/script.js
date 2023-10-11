@@ -47,15 +47,6 @@ document.getElementById('manualButton').addEventListener('click', function() {
 
         url = `/data?mode=automatic&pressure=${value}`
     }
-    /*
-    fetch('/data')
-    .then(response => response.json())
-    .then(data => {
-        console.log(data);
-    })
-    .catch((error) => {
-        console.error('Error:', error);
-    });*/
 
     fetch(url);
 });
@@ -70,7 +61,7 @@ mywsServer.onmessage = function(event) {
     }
     else {
         document.getElementById('modeP').textContent = `Current mode: Manual`;
-        document.getElementById('fanSpeedP').textContent = `Current fan speed: ${d.speed}`;
+        document.getElementById('fanSpeedP').textContent = `Current fan speed: ${d.speed} %`;
     }
     if(d.pressure != undefined){
         document.getElementById('pressureP').textContent = `Current pressure: ${d.pressure} Pa`;
