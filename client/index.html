@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Title Here</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <img src="https://productimages.biltema.com/v1/image/app/imagebyfilename/44-3063_xl_1.jpg" alt="Descriptive Image Text" id="exampleImage">
+
+    <p id="modeP">Current mode: ?</p>
+    <p id="pressureP">Current pressure: ? Pa</p>
+    <p id="fanSpeedP">Current fan speed: ?</p>
+    <p id="co2P">Current co2: ?</p>
+    <p id="tempP">Current temperature: ? C</p>
+    <p id="humidityP">Current humidity: ? %</p>
+    <p>Manual</p>
+    <label class="switch">
+    <input type="checkbox" id="switch">
+    <span class="slider round"></span>
+    </label>
+    <label for="slider" id="sliderLabel"><span id="sliderText">Pressure</span>: <span id="sliderValue">60</span></label>
+    <input type="range" id="slider" min="0" max="120" value="60">
+
+    <button type="button" id="manualButton">Set new mode or values</button>
+
+    <script src="/script.js"></script>
+</body>
+</html>
