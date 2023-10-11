@@ -3,15 +3,18 @@ const ctx = document.getElementById('myChart');
       const end_time = document.getElementById("end-time")
       const live_data = document.getElementById("live-data")
 
+
+      console.log(location.host)
+
       const url = "ws://192.168.1.106:3001"
       const mywsServer = new WebSocket(url)
 
-      let temperature = [23]
-      let setpoint = [23]
-      let humidity = [23]
-      let speed = [23]
-      let co2 = [23]
-      let pressure = [23]
+      let temperature = [0]
+      let setpoint = [0]
+      let humidity = [0]
+      let speed = [0]
+      let co2 = [0]
+      let pressure = [0]
       let time_stamps = [new Date()]
 
       function reset_data(){
@@ -77,20 +80,6 @@ const ctx = document.getElementById('myChart');
                 'month': 'MMM dd HH mm',
                 'quarter': 'MMM dd HH mm',
                 'year': 'MMM dd HH mm',
-
-                /*
-                'millisecond': 'MMM dd hh mm',
-                'second': 'MMM dd HH mm',
-                'minute': 'MMM dd HH mm',
-                //'hour': 'MMM dd hh mm',
-                'hour': 'HH:mm',
-                'day': 'MMM dd HH mm',
-                'week': 'MMM dd HH mm',
-                'month': 'MMM dd HH mm',
-                'quarter': 'MMM dd HH mm',
-                'year': 'MMM dd HH mm',
-
-                 */
               }
             },
             ticks: {
@@ -178,12 +167,15 @@ const ctx = document.getElementById('myChart');
         .then((res) => {
           console.log(res)
 
-          graph.data.datasets[0].data = res.setpoint.slice()
-          graph.data.datasets[1].data = res.pressure.slice()
-          graph.data.datasets[2].data = res.speed.slice()
-          graph.data.datasets[3].data = res.temperature.slice()
-          graph.data.datasets[4].data = res.co2.slice()
-          graph.data.datasets[5].data = res.rh.slice()
+          if(cb_set_point.checked && res.setpoint)      graph.data.datasets[0].data = res.setpoint.slice()
+          if(cb_pressure.checked && res.pressure)       graph.data.datasets[1].data = res.pressure.slice()
+          if(cb_speed.checked && res.speed)             graph.data.datasets[2].data = res.speed.slice()
+          if(cb_temperature.checked && res.temperature) graph.data.datasets[3].data = res.temperature.slice()
+          if(cb_co2.checked && res.co2)                 graph.data.datasets[4].data = res.co2.slice()
+          if(cb_humidity.checked && res.rh)             graph.data.datasets[5].data = res.rh.slice()
+
+
+
 
           time_stamps = []
           for(let date of res.time_stamp){

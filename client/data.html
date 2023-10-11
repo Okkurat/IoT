@@ -9,70 +9,79 @@
     </head>
     <body>
     <h1>Statistics</h1>
-    <div id="data-display">
-        <canvas id="myChart"></canvas>
-    </div>
-        <!--
-        <labl for="live-selection">Live</labl>
-        <input type="checkbox" name="live-data" id="live-data" checked>
--->
-        <labl for="live-data">Live</labl>
-        <label class="switch">
-            <input type="checkbox" id="live-data" name="live-data" checked>
-            <span class="slider round"></span>
-        </label>
-        <br> <br>
-        <input type="datetime-local" name="start-time" id="start-time">
-        <input type="datetime-local" name="end-time" id="end-time">
-        <br>
-        <br>
+        <div id="container">
+            <div>
 
-        <button onclick="fetch_data()">Get data</button>
-        <br>
-        <table>
-            <tr>
-                <th>Show</th>
-                <th>Parameter</th>
-                <th>Unit</th>
-                <th>Axis</th>
-            </tr>
-            <tr>
-                <td><input type="checkbox" name="show-set-point" id="show-set-point" checked></td>
-                <td>Set point</td>
-                <td>%</td>
-                <td>Left</td>
-            </tr>
-            <tr>
-                <td><input type="checkbox" name="show-pressure" id="show-pressure" checked></td>
-                <td>Pressure</td>
-                <td>Pa</td>
-                <td>Left</td>
-            </tr>
-            <tr>
-                <td><input type="checkbox" name="show-speed" id="show-speed" checked></td>
-                <td>Speed</td>
-                <td>%</td>
-                <td>Left</td>
-            </tr>
-            <tr>
-                <td><input type="checkbox" name="show-temperature" id="show-temperature" checked></td>
-                <td>Temperature</td>
-                <td>C</td>
-                <td>Left</td>
-            </tr>
-            <tr>
-                <td><input type="checkbox" name="show-co2" id="show-co2" checked></td>
-                <td>CO2</td>
-                <td>ppm</td>
-                <td>Right</td>
-            </tr>
-            <tr>
-                <td><input type="checkbox" name="show-humidity" id="show-humidity" checked></td>
-                <td>Humidity</td>
-                <td>%</td>
-                <td>Left</td>
-            </tr>
-        </table>
+                <div id="date-input-container">
+                    <label for="start-time">Start</label>
+                    <input type="datetime-local" name="start-time" id="start-time" class="date-input">
+                    <label for="end-time">End</label>
+                    <input type="datetime-local" name="end-time" id="end-time" class="date-input">
+                </div>
+
+                <div id="button-container">
+                    <button onclick="fetch_data()" id="fetch-data-btn">Get data</button>
+                    <div>
+                        <label for="live-data">Live</label>
+                        <label class="switch">
+                            <input type="checkbox" id="live-data" name="live-data" checked>
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+                </div>
+                <table>
+                    <tr>
+                        <th>Show</th>
+                        <th>Parameter</th>
+                        <th>Unit</th>
+                        <th>Axis</th>
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox" name="show-set-point" id="show-set-point" checked></td>
+                        <td>Set point</td>
+                        <td>%</td>
+                        <td>Left</td>
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox" name="show-pressure" id="show-pressure" checked></td>
+                        <td>Pressure</td>
+                        <td>Pa</td>
+                        <td>Left</td>
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox" name="show-speed" id="show-speed" checked></td>
+                        <td>Speed</td>
+                        <td>%</td>
+                        <td>Left</td>
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox" name="show-temperature" id="show-temperature" checked></td>
+                        <td>Temperature</td>
+                        <td>C</td>
+                        <td>Left</td>
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox" name="show-co2" id="show-co2" checked></td>
+                        <td>CO2</td>
+                        <td>ppm</td>
+                        <td>Right</td>
+                    </tr>
+                    <tr>
+                        <td><input type="checkbox" name="show-humidity" id="show-humidity" checked></td>
+                        <td>Humidity</td>
+                        <td>%</td>
+                        <td>Left</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div id="data-display">
+                <canvas id="myChart"></canvas>
+            </div>
+
+        </div>
+
+
     </body>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
