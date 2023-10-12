@@ -199,7 +199,7 @@ function fetch_data(){
   if(cb_humidity.checked && res.rh){
     graph.data.datasets[5].data = res.rh.slice()
   }
-  
+
   time_stamps = []
   for(let date of res.time_stamp){
     time_stamps.push(new Date(date))
@@ -207,17 +207,18 @@ function fetch_data(){
   graph.data.labels = time_stamps.slice()
   graph.update()
   })
+
   .catch((e) => {
     console.log(e)
   })
 }
 
-let cb_humidity = document.getElementById("show-humidity")
-let cb_set_point = document.getElementById("show-set-point")
-let cb_pressure = document.getElementById("show-pressure")
-let cb_speed = document.getElementById("show-speed")
-let cb_temperature = document.getElementById("show-temperature")
-let cb_co2 = document.getElementById("show-co2")
+const cb_humidity = document.getElementById("show-humidity")
+const cb_set_point = document.getElementById("show-set-point")
+const cb_pressure = document.getElementById("show-pressure")
+const cb_speed = document.getElementById("show-speed")
+const cb_temperature = document.getElementById("show-temperature")
+const cb_co2 = document.getElementById("show-co2")
 
 let checkboxes = [cb_set_point, cb_pressure, cb_speed, cb_temperature, cb_co2, cb_humidity]
 
