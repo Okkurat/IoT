@@ -1,24 +1,3 @@
-/*
-
-function fetchDataAndUpdate() {
-    fetch('/data')
-        .then(response => response.json())
-        .then(data => {
-            console.log(data)
-            document.getElementById('modeP').textContent = `Current mode: ${data.mode}`;
-            document.getElementById('pressureP').textContent = `Current pressure: ${data.pressure}`;
-            document.getElementById('fanSpeedP').textContent = `Current fan speed: ${data.fanSpeed}`;
-            document.getElementById('co2P').textContent = `Current co2: ${data.co2}`;
-            document.getElementById('tempP').textContent = `Current temperature: ${data.temp}`;
-            document.getElementById('humidityP').textContent = `Current humidity: ${data.humidity}`;
-        })
-        .catch(error => console.error('Error fetching data:', error));
-}
-
-setInterval(fetchDataAndUpdate, 1000);
-
-*/
-
 document.getElementById('switch').addEventListener('click', function(){
     if(document.getElementById('switch').checked) {
         document.getElementById('slider').max = '100';
@@ -57,33 +36,40 @@ mywsServer.onmessage = function(event) {
     console.log(data)
     if(d.error){
         document.getElementById('modeP').textContent = `Current mode: ERROR`
-        document.getElementById('pressureP').textContent = `Current pressure: ERROR Pa`
+        document.getElementById('pressureP').textContent = `Current pressure: ERROR`
         document.getElementById('fanSpeedP').textContent = `Current fan speed: ERROR`
         document.getElementById('co2P').textContent = `Current co2: ERROR`
-        document.getElementById('tempP').textContent = `Current temperature: ERROR C`
-        document.getElementById('humidityP').textContent = `Current humidity: ERROR %`
+        document.getElementById('tempP').textContent = `Current temperature: ERROR`
+        document.getElementById('humidityP').textContent = `Current humidity: ERROR`
     } 
     else {
         if(d.auto){
+            document.getElementById('switch').checked = false
+            document.getElementById('slider').value = '60'
+            document.getElementById('slider').max = '120';
+            document.getElementById('sliderValue').textContent = document.getElementById('slider').value
             document.getElementById('modeP').textContent = `Current mode: Automatic`
-            document.getElementById('pressureP').textContent = `Current pressure: ${d.pressure} Pa`
+            document.getElementById('sliderText').textContent = 'Pressure';
         }
         else {
+            document.getElementById('switch').checked = true
             document.getElementById('modeP').textContent = `Current mode: Manual`
-            document.getElementById('fanSpeedP').textContent = `Current fan speed: ${d.speed} %`
-        }
+            document.getElementById('slider').max = '100';
+            document.getElementById('slider').value = '50'
+            document.getElementById('sliderValue').textContent = document.getElementById('slider').value
+            document.getElementById('sliderText').textContent = 'Fan speed';
+        }/*
         if(d.pressure != undefined){
             document.getElementById('pressureP').textContent = `Current pressure: ${d.pressure} Pa`
-            document.getElementById('fanSpeedP').textContent = `Current fan speed: ${d.speed}`
+            document.getElementById('fanSpeedP').textContent = `Current fan speed: ${d.speed} %`
             document.getElementById('co2P').textContent = `Current co2: ${d.co2}`
             document.getElementById('tempP').textContent = `Current temperature: ${d.temp} C`
             document.getElementById('humidityP').textContent = `Current humidity: ${d.rh} %`
-        }
-
+        }*/
     }
 
   }
-
+/*
 document.addEventListener('DOMContentLoaded', function() {
     var slider = document.getElementById('slider')
     var sliderValue = document.getElementById('sliderValue')
@@ -94,4 +80,8 @@ document.addEventListener('DOMContentLoaded', function() {
     slider.addEventListener('input', function() {
         sliderValue.textContent = slider.value
     });
+});*/
+
+document.getElementById('slider').addEventListener('input', function() {
+    document.getElementById('sliderValue').textContent = document.getElementById('slider').value
 });

@@ -5,7 +5,8 @@ const PORT = 3000;
 const sqlite3 = require('sqlite3').verbose();
 const WebSocket = require("ws");
 const mqtt = require("mqtt");
-const mqtt_client = mqtt.connect("mqtt://192.168.1.106:1883");
+//const mqtt_client = mqtt.connect("mqtt://192.168.1.106:1883");
+const mqtt_client = mqtt.connect("mqtt://localhost:1883");
 
 
 app.use(express.static(path.join(__dirname, '../client')));
