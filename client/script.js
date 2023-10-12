@@ -32,7 +32,7 @@ document.getElementById('manualButton').addEventListener('click', function() {
     fetch(url)
 })
 
-mywsServer.onmessage = function(event) {
+mywsServer.onmessage = function(event){
     const { data } = event
     let d = JSON.parse(data)
     console.log(data)
