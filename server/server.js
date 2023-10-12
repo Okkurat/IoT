@@ -7,8 +7,8 @@ const PORT = 3000
 const sqlite3 = require('sqlite3').verbose()
 const WebSocket = require("ws")
 const mqtt = require("mqtt")
-//const mqtt_client = mqtt.connect("mqtt://192.168.1.106:1883")
-const mqtt_client = mqtt.connect("mqtt://localhost:1883")
+const mqtt_client = mqtt.connect("mqtt://192.168.1.106:1883")
+//const mqtt_client = mqtt.connect("mqtt://localhost:1883")
 const insert_measurement_query = "INSERT INTO measurement(nr,time_stamp,speed,setpoint,pressure,auto,error,co2,rh,temperature) VALUES (?,?,?,?,?,?,?,?,?,?)"
 const find_measurements_with_time = "SELECT ? FROM measurement WHERE time_stamp >= ? and time_stamp <= ?"
 const find_all_measurements = "SELECT ? FROM measurement"
