@@ -6,7 +6,7 @@ const ctx = document.getElementById('myChart');
 
       console.log(location.host)
 
-      const url = "ws://192.168.1.106:3001"
+      const url = "ws://localhost:3001"
       const mywsServer = new WebSocket(url)
 
       let temperature = [0]
