@@ -12,13 +12,11 @@ const mqtt_client = mqtt.connect("mqtt://192.168.1.106:1883")
 const insert_measurement_query = "INSERT INTO measurement(nr,time_stamp,speed,setpoint,pressure,auto,error,co2,rh,temperature) VALUES (?,?,?,?,?,?,?,?,?,?)"
 const find_measurements_with_time = "SELECT ? FROM measurement WHERE time_stamp >= ? and time_stamp <= ?"
 const find_all_measurements = "SELECT ? FROM measurement"
-
-
 app.use(express.static(path.join(__dirname, '../client')))
 app.set('views', path.join(__dirname, '../client/views'))
 app.use(express.json())
 
-let db = new sqlite3.Database('../data/myDatabase.db', sqlite3.OPEN_READWRITE, (err) => {
+const db = new sqlite3.Database('../data/myDatabase.db', sqlite3.OPEN_READWRITE, (err) => {
     if (err) {
         console.error(err.message)
     }
@@ -32,7 +30,7 @@ mqtt_client.on("connect", () => {
       }
   
     })
-  })
+})
 
 app.get('/', (req, res) => {
     res.sendFile(path.resolve("../client/index.html"))
