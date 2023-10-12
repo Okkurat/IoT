@@ -87,8 +87,6 @@ function execute(query, parameters = []){
   }
   
   function find_all(query, parameters){
-    console.log(query)
-    console.log(parameters)
     return new Promise((resolve, reject) => {
       db.all(query, parameters, (error, rows) => {
         if(error){
@@ -143,12 +141,7 @@ db.run(`CREATE TABLE IF NOT EXISTS measurement(
 
 myServer.on('upgrade', async function upgrade(request, socket, head) {      //handling upgrade(http to websocekt) event
     console.log("New upgrade")
-    // accepts half requests and rejects half. Reload browser page in case of rejection
-  
-    //if(Math.random() > 0.5){
-    //  return socket.end("HTTP/1.1 401 Unauthorized\r\n", "ascii")     //proper connection close in case of rejection
-    //}
-  
+
     //emit connection when request accepted
     wsServer.handleUpgrade(request, socket, head, function done(ws) {
       wsServer.emit('connection', ws, request);
@@ -160,8 +153,6 @@ myServer.on('upgrade', async function upgrade(request, socket, head) {      //ha
   mqtt_client.on("message", (topic, message) => {
     // message is Buffer
     let date = new Date()
-    //console.log(date.toString())
-    //console.log(date.getTime())
     let time_stamp = date.getTime()
     let data = JSON.parse(message.toString())
     data.time_stamp = time_stamp
@@ -188,7 +179,6 @@ myServer.on('upgrade', async function upgrade(request, socket, head) {      //ha
     execute(insert_measurement_query, args)
     .catch((error) => {
       console.log(error)
-      console.log("Error, could not insert new value to database")
     })
   });
 
@@ -220,8 +210,6 @@ myServer.on('upgrade', async function upgrade(request, socket, head) {      //ha
         data[param].push(k[param])
       }
     }
-  
-    console.log(data)
     return data
   }
   
@@ -253,11 +241,7 @@ myServer.on('upgrade', async function upgrade(request, socket, head) {      //ha
     if(req.query.setpoint){
       parameters.push("setpoint")
     }
-  
-  
-    //console.log(p)
-    //console.log(parameters)
-  
+
     let query
     if(req.query.start === undefined || req.query.end === undefined){
       query = find_all_measurements

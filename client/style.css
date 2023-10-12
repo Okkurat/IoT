@@ -3,12 +3,11 @@ img {
 }
 
 #data-display{
-    width: 80%;
-    height: 500px;
-}
-div{
-
-
+    min-width: 80%;
+    min-height: 80%;
+    margin-left: 40px;
+    background-color: white;
+    padding: 10px;
 }
 
 table, th, td {
@@ -181,6 +180,46 @@ input:checked + .slider:before {
     border-radius: 50%;
 }
 
+
+#container{
+    display: flex;
+}
+
+table{
+    margin-top: 10px;
+}
+
+#date-input-container{
+    display: flex;
+    flex-direction: column;
+}
+
+.date-input{
+    padding: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    font-size: 16px;
+
+}
+
+#button-container{
+    display: flex;
+    align-items: center;
+
+}
+
+#button-container div{
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+
+}
+
+
+#fetch-data-btn{
+    margin-right: 10px;
+}
+  
 a {
     color: blue;
     text-decoration: none;
