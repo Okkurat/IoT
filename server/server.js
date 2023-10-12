@@ -1,3 +1,5 @@
+"use strict";
+
 const express = require('express');
 const path = require('path');
 const app = express();
@@ -40,8 +42,8 @@ app.get('/data', (req, res) => {
       console.log(req.query.pressure)
       mqtt_client.publish("controller/settings", JSON.stringify({"auto": true, "pressure": +req.query.pressure}), {}, (err) => {
         if(err){
-          console.error("MQTT Publssh Error", err)
-          res.status(500).send("Failed to publis MQTT Message")
+          console.error("MQTT Publish Error", err)
+          res.status(500).send("Failed to publish MQTT Message")
         } else {
           console.log("Message published")
           res.send("Message published")
