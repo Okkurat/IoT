@@ -199,10 +199,7 @@ function fetch_data(){
   if(cb_humidity.checked && res.rh){
     graph.data.datasets[5].data = res.rh.slice()
   }
-
-
-
-
+  
   time_stamps = []
   for(let date of res.time_stamp){
     time_stamps.push(new Date(date))
