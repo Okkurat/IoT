@@ -13,13 +13,13 @@ document.getElementById('switch').addEventListener('click', function(){
         sliderValue.textContent = '60'
         document.getElementById('sliderText').textContent = 'Pressure'
     }
-});
+})
 
 const url = "ws://localhost:3001"
 const mywsServer = new WebSocket(url)
 
 document.getElementById('manualButton').addEventListener('click', function() {
-    let url = "";
+    let url = ""
     let value = document.getElementById('slider').value
     if(document.getElementById('switch').checked) {
         url = `/data?mode=manual&speed=${value}`
@@ -29,8 +29,8 @@ document.getElementById('manualButton').addEventListener('click', function() {
         url = `/data?mode=automatic&pressure=${value}`
     }
 
-    fetch(url);
-});
+    fetch(url)
+})
 
 mywsServer.onmessage = function(event) {
     const { data } = event
@@ -69,8 +69,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     slider.addEventListener('input', function() {
         sliderValue.textContent = slider.value
-    });
-});
+    })
+})
 
 function popError(state){
     if(state){

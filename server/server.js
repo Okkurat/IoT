@@ -1,26 +1,29 @@
-"use strict";
+"use strict"
 
-const express = require('express');
-const path = require('path');
-const app = express();
-const PORT = 3000;
-const sqlite3 = require('sqlite3').verbose();
-const WebSocket = require("ws");
-const mqtt = require("mqtt");
-//const mqtt_client = mqtt.connect("mqtt://192.168.1.106:1883");
-const mqtt_client = mqtt.connect("mqtt://localhost:1883");
+const express = require('express')
+const path = require('path')
+const app = express()
+const PORT = 3000
+const sqlite3 = require('sqlite3').verbose()
+const WebSocket = require("ws")
+const mqtt = require("mqtt")
+//const mqtt_client = mqtt.connect("mqtt://192.168.1.106:1883")
+const mqtt_client = mqtt.connect("mqtt://localhost:1883")
+const insert_measurement_query = "INSERT INTO measurement(nr,time_stamp,speed,setpoint,pressure,auto,error,co2,rh,temperature) VALUES (?,?,?,?,?,?,?,?,?,?)"
+const find_measurements_with_time = "SELECT ? FROM measurement WHERE time_stamp >= ? and time_stamp <= ?"
+const find_all_measurements = "SELECT ? FROM measurement"
 
 
-app.use(express.static(path.join(__dirname, '../client')));
-app.set('views', path.join(__dirname, '../client/views'));
-app.use(express.json());
+app.use(express.static(path.join(__dirname, '../client')))
+app.set('views', path.join(__dirname, '../client/views'))
+app.use(express.json())
 
 let db = new sqlite3.Database('../data/myDatabase.db', sqlite3.OPEN_READWRITE, (err) => {
     if (err) {
-        console.error(err.message);
+        console.error(err.message)
     }
-    console.log('Connected to the SQLite database.');
-});
+    console.log('Connected to the SQLite database.')
+})
 
 mqtt_client.on("connect", () => {
     mqtt_client.subscribe("controller/status", (err) => {
@@ -28,12 +31,12 @@ mqtt_client.on("connect", () => {
         console.log("Subscribed to controller/status")
       }
   
-    });
-  });
+    })
+  })
 
 app.get('/', (req, res) => {
     res.sendFile(path.resolve("../client/index.html"))
-});
+})
 
 app.get('/data', (req, res) => {
 
@@ -62,21 +65,21 @@ app.get('/data', (req, res) => {
         }
       })
     }
-});
+})
 
 app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
-});
+    console.log(`Server is running on http://localhost:${PORT}`)
+})
 
 process.on('SIGINT', () => {
     db.close((err) => {
         if (err) {
-            return console.error(err.message);
+            return console.error(err.message)
         }
-        console.log('Closed the database connection.');
-        process.exit(0);
-    });
-});
+        console.log('Closed the database connection.')
+        process.exit(0)
+    })
+})
 
 function execute(query, parameters = []){
     return new Promise((resolve, reject) => {
@@ -85,20 +88,20 @@ function execute(query, parameters = []){
           reject(error)
         }
         resolve()
-      });
+      })
     })
   }
   
-  function find_all(query, parameters){
-    return new Promise((resolve, reject) => {
-      db.all(query, parameters, (error, rows) => {
-        if(error){
-          reject(error)
-        }
-        resolve(rows)
-      });
+function find_all(query, parameters){
+  return new Promise((resolve, reject) => {
+    db.all(query, parameters, (error, rows) => {
+      if(error){
+        reject(error)
+      }
+      resolve(rows)
     })
-  }
+  })
+}
 
 const myServer = app.listen(3001)
 
@@ -111,7 +114,7 @@ console.log("New connection")
 ws.on("message", function(msg) {        // what to do on message event
     wsServer.clients.forEach(function each(client) {
     if (client.readyState === WebSocket.OPEN) {     // check if client is ready
-        client.send(msg.toString());
+        client.send(msg.toString())
     }
     })
 })
@@ -147,125 +150,119 @@ myServer.on('upgrade', async function upgrade(request, socket, head) {      //ha
 
     //emit connection when request accepted
     wsServer.handleUpgrade(request, socket, head, function done(ws) {
-      wsServer.emit('connection', ws, request);
-    });
-  });
-
-  const insert_measurement_query = "INSERT INTO measurement(nr,time_stamp,speed,setpoint,pressure,auto,error,co2,rh,temperature) VALUES (?,?,?,?,?,?,?,?,?,?)"
-
-  mqtt_client.on("message", (topic, message) => {
-    // message is Buffer
-    let date = new Date()
-    let time_stamp = date.getTime()
-    let data = JSON.parse(message.toString())
-    data.time_stamp = time_stamp
-  
-    wsServer.clients.forEach(function each(client) {
-      if (client.readyState === WebSocket.OPEN) {     // check if client is ready
-        //client.send(message.toString());
-        client.send(JSON.stringify(data));
-      }
+      wsServer.emit('connection', ws, request)
     })
-  
-    let args = [
-      data.nr,
-      time_stamp,
-      data.speed,
-      data.setpoint,
-      data.pressure,
-      data.auto,
-      data.error,
-      data.co2,
-      data.rh,
-      data.temp
-    ]
-    execute(insert_measurement_query, args)
-    .catch((error) => {
-      console.log(error)
-    })
-  });
-
-  app.get("/statistics", (req, res) => {
-    res.sendFile(path.resolve("../Client/data.html"))
   })
 
-  const find_measurements_with_time = "SELECT ? FROM measurement WHERE time_stamp >= ? and time_stamp <= ?"
-  const find_all_measurements = "SELECT ? FROM measurement"
+mqtt_client.on("message", (topic, message) => {
+  // message is Buffer
+  let date = new Date()
+  let time_stamp = date.getTime()
+  let data = JSON.parse(message.toString())
+  data.time_stamp = time_stamp
   
-  async function get_data(query, parameters, start=0, end=0){
-    let data = {}
-  
-    const placeholders = parameters.map(() => '?').join(',');
-  
-    let q;
-    if(start === 0 && end === 0){
-      q = "SELECT * FROM measurement"
+  wsServer.clients.forEach(function each(client) {
+    if (client.readyState === WebSocket.OPEN) {     // check if client is ready
+      //client.send(message.toString())
+      client.send(JSON.stringify(data))
     }
-    else {
-      q = "SELECT * FROM measurement WHERE time_stamp >= ? and time_stamp <= ?"
-    }
+  })
   
-    let new_data = await find_all(q, [start, end])
+  let args = [
+    data.nr,
+    time_stamp,
+    data.speed,
+    data.setpoint,
+    data.pressure,
+    data.auto,
+    data.error,
+    data.co2,
+    data.rh,
+    data.temp
+  ]
+  execute(insert_measurement_query, args)
+  .catch((error) => {
+    console.log(error)
+  })
+})
+
+app.get("/statistics", (req, res) => {
+  res.sendFile(path.resolve("../client/data.html"))
+})
+
+
   
-    for(let param of parameters){
-      data[param] = []
-      for(let k of new_data){
-        data[param].push(k[param])
-      }
-    }
-    return data
+async function get_data(query, parameters, start=0, end=0){
+  let data = {}
+  
+  const placeholders = parameters.map(() => '?').join(',')
+  
+  let q
+  if(start === 0 && end === 0){
+    q = "SELECT * FROM measurement"
+  }
+  else {
+    q = "SELECT * FROM measurement WHERE time_stamp >= ? and time_stamp <= ?"
   }
   
-  app.get("/statistcs/data", async (req, res) => {
-    console.log(req.query)
-    let args = []
+  let new_data = await find_all(q, [start, end])
+  
+  for(let param of parameters){
+    data[param] = []
+    for(let k of new_data){
+      data[param].push(k[param])
+    }
+  }
+  return data
+}
+  
+app.get("/statistcs/data", async (req, res) => {
+  console.log(req.query)
+  let args = []
   
   
-    let parameters = []
+  let parameters = []
   
-    parameters.push("time_stamp")
+  parameters.push("time_stamp")
   
   
-    if(req.query.temperature){
-      parameters.push("temperature")
-    }
-    if(req.query.pressure){
-      parameters.push("pressure")
-    }
-    if(req.query.rh){
-      parameters.push("rh")
-    }
-    if(req.query.co2){
-      parameters.push("co2")
-    }
-    if(req.query.speed){
-      parameters.push("speed")
-    }
-    if(req.query.setpoint){
-      parameters.push("setpoint")
-    }
+  if(req.query.temperature){
+    parameters.push("temperature")
+  }
+  if(req.query.pressure){
+    parameters.push("pressure")
+  }
+  if(req.query.rh){
+    parameters.push("rh")
+  }
+  if(req.query.co2){
+    parameters.push("co2")
+  }
+  if(req.query.speed){
+    parameters.push("speed")
+  }
+  if(req.query.setpoint){
+    parameters.push("setpoint")
+  }
 
-    let query
-    if(req.query.start === undefined || req.query.end === undefined){
-      query = find_all_measurements
-    }
-    else {
-      query = find_measurements_with_time
-      args.push(req.query.start)
-      args.push(req.query.end)
-    }
+  let query
+  if(req.query.start === undefined || req.query.end === undefined){
+    query = find_all_measurements
+  }
+  else {
+    query = find_measurements_with_time
+    args.push(req.query.start)
+    args.push(req.query.end)
+  }
   
-    try{
-      let data = await get_data(query, parameters, parseInt(req.query.start), parseInt(req.query.end))
-      res.send(data)
-    }
-    catch(exception){
-      console.log(exception)
-      res.sendStatus(500)
-    }
-  
-  
-  
-  })
+  try{
+    let data = await get_data(query, parameters, parseInt(req.query.start), parseInt(req.query.end))
+    res.send(data)
+  }
+  catch(exception){
+    console.log(exception)
+    res.sendStatus(500)
+  }  
+})
   
 init_db()

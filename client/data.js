@@ -1,4 +1,6 @@
-const ctx = document.getElementById('myChart');
+"use strict"
+
+const ctx = document.getElementById('myChart')
       const start_time = document.getElementById("start-time")
       const end_time = document.getElementById("end-time")
       const live_data = document.getElementById("live-data")
@@ -143,7 +145,7 @@ const ctx = document.getElementById('myChart');
         },
         options: options1
 
-      });
+      })
 
       function fetch_data(){
         reset_data()
@@ -201,9 +203,9 @@ const ctx = document.getElementById('myChart');
       for(let i = 0; i < checkboxes.length; i++){
         checkboxes[i].addEventListener("click", (event) =>{
           if(checkboxes[i].checked)
-            graph.data.datasets[i].hidden = false;
+            graph.data.datasets[i].hidden = false
           else
-            graph.data.datasets[i].hidden = true;
+            graph.data.datasets[i].hidden = true
 
           graph.update()
         })
