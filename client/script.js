@@ -55,21 +55,33 @@ mywsServer.onmessage = function(event) {
     const { data } = event
     let d = JSON.parse(data)
     console.log(data)
-    if(d.auto){
-        document.getElementById('modeP').textContent = `Current mode: Automatic`
-        document.getElementById('pressureP').textContent = `Current pressure: ${d.pressure}`;
-    }
+    if(d.error){
+        document.getElementById('modeP').textContent = `Current mode: ERROR`
+        document.getElementById('pressureP').textContent = `Current pressure: ERROR Pa`
+        document.getElementById('fanSpeedP').textContent = `Current fan speed: ERROR`
+        document.getElementById('co2P').textContent = `Current co2: ERROR`
+        document.getElementById('tempP').textContent = `Current temperature: ERROR C`
+        document.getElementById('humidityP').textContent = `Current humidity: ERROR %`
+    } 
     else {
-        document.getElementById('modeP').textContent = `Current mode: Manual`;
-        document.getElementById('fanSpeedP').textContent = `Current fan speed: ${d.speed} %`;
+        if(d.auto){
+            document.getElementById('modeP').textContent = `Current mode: Automatic`
+            document.getElementById('pressureP').textContent = `Current pressure: ${d.pressure} Pa`
+        }
+        else {
+            document.getElementById('modeP').textContent = `Current mode: Manual`
+            document.getElementById('fanSpeedP').textContent = `Current fan speed: ${d.speed} %`
+        }
+        if(d.pressure != undefined){
+            document.getElementById('pressureP').textContent = `Current pressure: ${d.pressure} Pa`
+            document.getElementById('fanSpeedP').textContent = `Current fan speed: ${d.speed}`
+            document.getElementById('co2P').textContent = `Current co2: ${d.co2}`
+            document.getElementById('tempP').textContent = `Current temperature: ${d.temp} C`
+            document.getElementById('humidityP').textContent = `Current humidity: ${d.rh} %`
+        }
+
     }
-    if(d.pressure != undefined){
-        document.getElementById('pressureP').textContent = `Current pressure: ${d.pressure} Pa`;
-        document.getElementById('fanSpeedP').textContent = `Current fan speed: ${d.speed}`;
-        document.getElementById('co2P').textContent = `Current co2: ${d.co2}`;
-        document.getElementById('tempP').textContent = `Current temperature: ${d.temp} C`;
-        document.getElementById('humidityP').textContent = `Current humidity: ${d.rh} %`;
-    }
+
   }
 
 document.addEventListener('DOMContentLoaded', function() {
