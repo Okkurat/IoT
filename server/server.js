@@ -150,6 +150,7 @@ myServer.on('upgrade', async function upgrade(request, socket, head) {      //ha
     })
   })
 
+// Handling message event
 mqtt_client.on("message", (topic, message) => {
   const insert_measurement_query = "INSERT INTO measurement(nr,time_stamp,speed,setpoint,pressure,auto,error,co2,rh,temperature) VALUES (?,?,?,?,?,?,?,?,?,?)"
   // message is Buffer
@@ -185,13 +186,9 @@ mqtt_client.on("message", (topic, message) => {
 app.get("/statistics", (req, res) => {
   res.sendFile(path.resolve("../client/data.html"))
 })
-
-
-  
+// Helper function to fetch data from the database
 async function get_data(query, parameters, start=0, end=0){
   let data = {}
-  
-  const placeholders = parameters.map(() => '?').join(',')
   
   let q
   if(start === 0 && end === 0){
@@ -211,15 +208,13 @@ async function get_data(query, parameters, start=0, end=0){
   }
   return data
 }
-  
+// Fetching data from database and pushing data from the given time stamp periods
 app.get("/statistcs/data", async (req, res) => {
 
   const find_measurements_with_time = "SELECT ? FROM measurement WHERE time_stamp >= ? and time_stamp <= ?"
   const find_all_measurements = "SELECT ? FROM measurement"
   console.log(req.query)
   let args = []
-  
-  
   let parameters = []
   
   parameters.push("time_stamp")
