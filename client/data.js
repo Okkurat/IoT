@@ -75,7 +75,6 @@ let options1 = {
           'millisecond': 'MMM dd hh mm',
           'second': 'MMM dd HH mm',
           'minute': 'HH mm',
-          //'hour': 'MMM dd hh mm',
           'hour': 'HH:mm',
           'day': 'MMM dd HH mm',
           'week': 'MMM dd HH mm',
@@ -233,7 +232,7 @@ for(let i = 0; i < checkboxes.length; i++){
   })
 }
 
-      //handling message event
+//handling message event
 mywsServer.onmessage = function(event){
   if(!live_data.checked){
     return

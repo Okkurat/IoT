@@ -9,20 +9,19 @@ const WebSocket = require("ws")
 const mqtt = require("mqtt")
 //const mqtt_client = mqtt.connect("mqtt://192.168.1.106:1883")
 const mqtt_client = mqtt.connect("mqtt://localhost:1883")
-const insert_measurement_query = "INSERT INTO measurement(nr,time_stamp,speed,setpoint,pressure,auto,error,co2,rh,temperature) VALUES (?,?,?,?,?,?,?,?,?,?)"
-const find_measurements_with_time = "SELECT ? FROM measurement WHERE time_stamp >= ? and time_stamp <= ?"
-const find_all_measurements = "SELECT ? FROM measurement"
 app.use(express.static(path.join(__dirname, '../client')))
 app.set('views', path.join(__dirname, '../client/views'))
 app.use(express.json())
 
+
+// Using SQLITE3 database
 const db = new sqlite3.Database('../data/myDatabase.db', sqlite3.OPEN_READWRITE, (err) => {
     if (err) {
         console.error(err.message)
     }
     console.log('Connected to the SQLite database.')
 })
-
+// Using MQTT
 mqtt_client.on("connect", () => {
     mqtt_client.subscribe("controller/status", (err) => {
       if (!err) {
@@ -35,9 +34,8 @@ mqtt_client.on("connect", () => {
 app.get('/', (req, res) => {
     res.sendFile(path.resolve("../client/index.html"))
 })
-
+// Publishing MQTT gotten from query, the options are autmatic mode with pressure or manual mode with fan speed
 app.get('/data', (req, res) => {
-
     console.log(req.query.mode)
     if(req.query.mode == "automatic"){
       console.log(req.query.pressure)
@@ -88,7 +86,7 @@ function execute(query, parameters = []){
         resolve()
       })
     })
-  }
+}
   
 function find_all(query, parameters){
   return new Promise((resolve, reject) => {
@@ -117,7 +115,7 @@ ws.on("message", function(msg) {        // what to do on message event
     })
 })
 })
-  
+
 function init_db(){
 db.run(`CREATE TABLE IF NOT EXISTS measurement(
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -153,6 +151,7 @@ myServer.on('upgrade', async function upgrade(request, socket, head) {      //ha
   })
 
 mqtt_client.on("message", (topic, message) => {
+  const insert_measurement_query = "INSERT INTO measurement(nr,time_stamp,speed,setpoint,pressure,auto,error,co2,rh,temperature) VALUES (?,?,?,?,?,?,?,?,?,?)"
   // message is Buffer
   let date = new Date()
   let time_stamp = date.getTime()
@@ -161,7 +160,6 @@ mqtt_client.on("message", (topic, message) => {
   
   wsServer.clients.forEach(function each(client) {
     if (client.readyState === WebSocket.OPEN) {     // check if client is ready
-      //client.send(message.toString())
       client.send(JSON.stringify(data))
     }
   })
@@ -215,6 +213,9 @@ async function get_data(query, parameters, start=0, end=0){
 }
   
 app.get("/statistcs/data", async (req, res) => {
+
+  const find_measurements_with_time = "SELECT ? FROM measurement WHERE time_stamp >= ? and time_stamp <= ?"
+  const find_all_measurements = "SELECT ? FROM measurement"
   console.log(req.query)
   let args = []
   
