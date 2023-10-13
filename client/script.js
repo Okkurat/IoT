@@ -1,6 +1,8 @@
 "use strict"
-
-// Adding eventListener for the button. If the button is checked, it means the mode is manual and if it isnt then the mode is automatic and does change accordingly
+/*
+Adding eventListener for the button. If the button is checked, 
+it means the mode is manual and if it isnt then the mode is automatic and does change accordingly
+*/
 document.getElementById('switch').addEventListener('click', function(){
     if(document.getElementById('switch').checked) {
         document.getElementById('slider').max = '100'
@@ -42,7 +44,10 @@ mywsServer.onmessage = function(event){
     const { data } = event
     let d = JSON.parse(data)
     console.log(data)
-    // If error is popped, the separate popError function is used to pop it to the page. Otherwise it checks if the error exists in the page and if it does, it removes it
+    /*
+    If error is popped, the separate popError function is used to pop it to the page. 
+    Otherwise it checks if the error exists in the page and if it does, it removes it
+    */
     if(d.error){
         if(!(document.getElementById('error'))){
             popError(true)

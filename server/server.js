@@ -34,7 +34,7 @@ mqtt_client.on("connect", () => {
 app.get('/', (req, res) => {
     res.sendFile(path.resolve("../client/index.html"))
 })
-// Publishing MQTT gotten from query, the options are autmatic mode with pressure or manual mode with fan speed
+// Publishing MQTT gotten from query, the options are automatic mode with pressure or manual mode with fan speed
 app.get('/data', (req, res) => {
     console.log(req.query.mode)
     if(req.query.mode == "automatic"){
