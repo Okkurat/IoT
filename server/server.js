@@ -107,7 +107,7 @@ const wsServer = new WebSocket.Server({
 
 wsServer.on("connection", function(ws) {    // what should a websocket do on connection
 console.log("New connection")
-ws.on("message", function(msg) {        // what to do on message event
+ws.on("message", function(msg) {          // what to do on message event
     wsServer.clients.forEach(function each(client) {
     if (client.readyState === WebSocket.OPEN) {     // check if client is ready
         client.send(msg.toString())
@@ -190,6 +190,8 @@ app.get("/statistics", (req, res) => {
 async function get_data(query, parameters, start=0, end=0){
   let data = {}
   
+  // Check if timestamps are given
+
   let q
   if(start === 0 && end === 0){
     q = "SELECT * FROM measurement"

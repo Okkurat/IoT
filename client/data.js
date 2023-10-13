@@ -97,7 +97,7 @@ let options1 = {
     duration: 0
   }
 }
-// Defining Chart
+// Defining graph
 let graph = new Chart(ctx, {
   type: 'line',
   data: {
