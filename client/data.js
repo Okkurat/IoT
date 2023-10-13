@@ -97,7 +97,7 @@ let options1 = {
     duration: 0
   }
 }
-
+// Defining Chart
 let graph = new Chart(ctx, {
   type: 'line',
   data: {
@@ -145,7 +145,7 @@ let graph = new Chart(ctx, {
   options: options1
 
 })
-
+// Fetching data and putting it on graph
 function fetch_data(){
   reset_data()
   live_data.checked = false
@@ -220,7 +220,7 @@ const cb_temperature = document.getElementById("show-temperature")
 const cb_co2 = document.getElementById("show-co2")
 
 let checkboxes = [cb_set_point, cb_pressure, cb_speed, cb_temperature, cb_co2, cb_humidity]
-
+// Adding eventlisteners for the checkboxes to hide or show data on the graph
 for(let i = 0; i < checkboxes.length; i++){
   checkboxes[i].addEventListener("click", (event) =>{
     if(checkboxes[i].checked)
